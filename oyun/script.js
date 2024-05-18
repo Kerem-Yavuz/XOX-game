@@ -164,7 +164,7 @@ function draw() {
       colorRed = map(currenColorTime, 0, colorDurationTime, 0, 255);
       fill(colorRed, 50, 255 - colorRed);
       //console.log("Red:" + colorRed);
-      //this project made by 8th group
+      //this project made by 8th group, other than us no one can use this code.
     }
     else if (currenColorTime < colorDurationTime && turn === 1) {
       colorBlue = map(currenColorTime, 0, colorDurationTime, 0, 255);
