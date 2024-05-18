@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <title>XOX-GAME</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="/oyun/images/icon.png">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body {
+      font-family: "Lato", sans-serif
+    }
+
+    .mySlides {
+      display: none
+    }
+  </style>
+  <div class="w3-top">
+    <div class="w3-bar w3-black w3-card">
+      <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)"
+        onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+      <a href="../index.html#" class="w3-bar-item w3-button w3-padding-large">OYUN HAKKINDA</a>
+      <a href="../index.html#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">İsimler</a>
+
+    </div>
+  </div>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>XOX Game</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.js"></script>
+</head>
+
+<body>
+  <center>
+    <p>‎ </p>
+    <table>
+      <tr>
+        <td>
+          <div id="game">
+            <script src="script.js" id="script"></script>
+          </div>
+        </td>
+        <td>
+          <div class="container">
+            <div class="row">
+              <div class="col col-heading">
+                <h1>O</h1>
+              </div>
+              <div class="col col-displayO" id="scoreO">0</div>
+            </div>
+            <div class="row">
+              <div class="col col-heading">
+                <h1>X</h1>
+              </div>
+              <div class="col col-displayX" id="scoreX">0</div>
+            </div>
+          </div>
+          <div class="roundContainer">
+            <div style="width: 100%; overflow: hidden;">
+              <div style=" float: left;"> ROUND: </div>
+              <div style="margin-left: 100px;" id="round">0</div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </center>
+</body>
+
+</html>
