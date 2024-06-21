@@ -1,44 +1,56 @@
-let a = [
-  [0, 0, 0],
-  [0, 0, 0],
-  [0, 0, 0]
-];
-let pointsO = 0;
-let pointsX = 0;
-let turn = 0;//0 means turn for "O"  1 means turn for "X"
-let stop = true;// false means game runs, true means game stops
+let game = {
+  a: [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0]
+  ],
+  pointsO: 0,
+  pointsX: 0,
+  turn: 0,//0 means turn for "O"  1 means turn for "X"
+  stop: true,// false means game runs, true means game stops
+};
+
 
 let canvasX = 600;
 let canvasY = 600;
 
 
 // coin flip variables
-let startTime;
-let durationTime = 2000; // base value = 2000, means 2 seconds
-let rotating = false;
+let coin = {
+  startTime: 0,
+  durationTime: 1500, // base value = 2000, means 2 seconds
+  rotating: false,
+  coinValue: 0,
+  rotationSpeed: 10, // base value = 10
+};
+
 let flipButton;
 let startGameButton;
-let coin;
-let rotationSpeed = 10; // base value = 10
+
+
+
 
 
 //game box color change variables
-let startColorTime;
-let colorDurationTime = 1000;//minimum it should be 1000 under this creates problem, 1200 recommended
-let currentColor;
+let gameLines = {
+  startColorTime: 0,
+  colorDurationTime: 1000,//minimum it should be 1000 under this creates problem, 1200 recommended
+  currentColor: 0,
+};
 
 
 
 //game end line variables
-let startLineTime;
-let lineDurationTime= 500;
-let button;
-let currentLineTime;
-let lineLenght;
-let startX;
-let startY;
-let isHorizontal=0;//0 for horizontal, 1 for vertical,2 for \ ,3 for /
-let isBlue;
+let endLines = {
+startLineTime:-999999,
+lineDurationTime: 500,
+currentLineTime: 0,
+lineLenght: 0,
+startX: 0,
+startY: 0,
+isHorizontal: 0,//0 for horizontal, 1 for vertical,2 for \ ,3 for /
+isBlue: true,
+};
 
 
 
@@ -59,7 +71,7 @@ function setup() {
   startGameButton.position(canvasX * 2, canvasY / 6);
   startGameButton.hide();
   startGameButton.mousePressed(function() {
-    rotating = false; // Stop animation on remove button click
+    coin.rotating = false; // Stop animation on remove button click
     var roundElement = document.getElementById("round");
     var roundNumber = parseInt(roundElement.innerHTML); // Get the current round number and convert it to an integer
     roundNumber++; // Increment the round number
@@ -77,75 +89,73 @@ function setup() {
 
 function draw() {
 
-  
 
-  
+
+
   //GAME END LİNES//
-  if(stop === true)
-  {
-    translate(-canvasX/2,-canvasY/2,0);
-    fill(255,50,0);
-    strokeWeight(canvasX/40);
-    currentLineTime = millis() - startLineTime;
-    if (currentLineTime < lineDurationTime)
-      {
-          lineLenght = map(currentLineTime, 0, lineDurationTime, 0, canvasX/4*3);
-          stroke('rgba(255,77,77, 0.50)');
-          if(isBlue)
-            stroke('rgba(77,77,255,0.50)');
+  if (game.stop === true) {
+    translate(-canvasX / 2, -canvasY / 2, 0);
+    fill(255, 50, 0);
+    strokeWeight(canvasX / 40);
+    endLines.currentLineTime = millis() - endLines.startLineTime;
+    if (endLines.currentLineTime < endLines.lineDurationTime) {
+      endLines.lineLenght = map(endLines.currentLineTime, 0, endLines.lineDurationTime, 0, canvasX / 4 * 3);
+      stroke('rgba(255,77,77, 0.50)');
+      if (endLines.isBlue)
+        stroke('rgba(77,77,255,0.50)');
 
 
-          switch (isHorizontal){
+      switch (endLines.isHorizontal) {
 
-            case 0:
-              {
-                line(startX-lineLenght/2,startY,startX+lineLenght/2,startY);
-                stroke(255, 200, 200);
-                if(isBlue)
-                  stroke('rgba(200,200,255,1)');
-                strokeWeight(canvasX/120);
-                line(startX-lineLenght/2,startY,startX+lineLenght/2,startY);
-                break;
-              }
-            case 1:
-            {
-              line(startX,startY-lineLenght/2,startX,startY+lineLenght/2);
-              stroke(255, 200, 200);
-              if(isBlue)
-                stroke('rgba(200,200,255,1)');
-              strokeWeight(canvasX/120);
-              line(startX,startY-lineLenght/2,startX,startY+lineLenght/2);
-              break;
-            }
-            case 2:
-            {
-              line(startX-lineLenght/2,startY-lineLenght/2,startX+lineLenght/2,startY+lineLenght/2);
-              stroke(255, 200, 200);
-              if(isBlue)
-                stroke('rgba(200,200,255,1)');
-              strokeWeight(canvasX/120);
-              line(startX-lineLenght/2,startY-lineLenght/2,startX+lineLenght/2,startY+lineLenght/2);
-              break;
-            }
-            case 3:
-            {
-              line(startX-lineLenght/2,startY+lineLenght/2,startX+lineLenght/2,startY-lineLenght/2);
-              stroke(255, 200, 200);
-              if(isBlue)
-                stroke('rgba(200,200,255,1)');
-              strokeWeight(canvasX/120);
-              line(startX-lineLenght/2,startY+lineLenght/2,startX+lineLenght/2,startY-lineLenght/2);
-              break;
-            }
-
+        case 0:
+          {
+            line(endLines.startX - endLines.lineLenght / 2, endLines.startY, endLines.startX + endLines.lineLenght / 2, endLines.startY);
+            stroke(255, 200, 200);
+            if (endLines.isBlue)
+              stroke('rgba(200,200,255,1)');
+            strokeWeight(canvasX / 120);
+            line(endLines.startX - endLines.lineLenght / 2, endLines.startY, endLines.startX + endLines.lineLenght / 2, endLines.startY);
+            break;
           }
+        case 1:
+          {
+            line(endLines.startX, endLines.startY - endLines.lineLenght / 2, endLines.startX, endLines.startY + endLines.lineLenght / 2);
+            stroke(255, 200, 200);
+            if (endLines.isBlue)
+              stroke('rgba(200,200,255,1)');
+            strokeWeight(canvasX / 120);
+            line(endLines.startX, endLines.startY - endLines.lineLenght / 2, endLines.startX, endLines.startY + endLines.lineLenght / 2);
+            break;
+          }
+        case 2:
+          {
+            line(endLines.startX - endLines.lineLenght / 2, endLines.startY - endLines.lineLenght / 2, endLines.startX + endLines.lineLenght / 2, endLines.startY + endLines.lineLenght / 2);
+            stroke(255, 200, 200);
+            if (endLines.isBlue)
+              stroke('rgba(200,200,255,1)');
+            strokeWeight(canvasX / 120);
+            line(endLines.startX - endLines.lineLenght / 2, endLines.startY - endLines.lineLenght / 2, endLines.startX + endLines.lineLenght / 2, endLines.startY + endLines.lineLenght / 2);
+            break;
+          }
+        case 3:
+          {
+            line(endLines.startX - endLines.lineLenght / 2, endLines.startY + endLines.lineLenght / 2, endLines.startX + endLines.lineLenght / 2, endLines.startY - endLines.lineLenght / 2);
+            stroke(255, 200, 200);
+            if (endLines.isBlue)
+              stroke('rgba(200,200,255,1)');
+            strokeWeight(canvasX / 120);
+            line(endLines.startX - endLines.lineLenght / 2, endLines.startY + endLines.lineLenght / 2, endLines.startX + endLines.lineLenght / 2, endLines.startY - endLines.lineLenght / 2);
+            break;
+          }
+
       }
+    }
   }
 
 
   //GAME LINES//
 
-  if (stop === false) {
+  if (game.stop === false) {
 
     push();//game lines
     translate(-canvasX / 2, -canvasY / 2);
@@ -157,33 +167,33 @@ function draw() {
     pointLight(255, 255, 255, -100, -canvasY / 7.5, 100);
     let colorBlue;
     let colorRed;
-    let currenColorTime = millis() - startColorTime;
+    let currenColorTime = millis() - gameLines.startColorTime;
 
 
-    if (currenColorTime < colorDurationTime && turn === 0) {
-      colorRed = map(currenColorTime, 0, colorDurationTime, 0, 255);
+    if (currenColorTime < gameLines.colorDurationTime && game.turn === 0) {
+      colorRed = map(currenColorTime, 0, gameLines.colorDurationTime, 0, 255);
       fill(colorRed, 50, 255 - colorRed);
       //console.log("Red:" + colorRed);
       //this project made by 8th group, other than us no one can use this code.
     }
-    else if (currenColorTime < colorDurationTime && turn === 1) {
-      colorBlue = map(currenColorTime, 0, colorDurationTime, 0, 255);
+    else if (currenColorTime < gameLines.colorDurationTime && game.turn === 1) {
+      colorBlue = map(currenColorTime, 0, gameLines.colorDurationTime, 0, 255);
       fill(255 - colorBlue, 50, colorBlue);
       //console.log("Blue:" + colorBlue);
     }//çerçeve rengi
     else {
-      fill(currentColor);
+      fill(gameLines.currentColor);
     }
 
     if (colorBlue > 245) {
-      currentColor = color(0, 50, 255);
+      gameLines.currentColor = color(0, 50, 255);
 
     }
     if (colorRed > 245) {
-      currentColor = color(255, 50, 0);
+      gameLines.currentColor = color(255, 50, 0);
     }
-    
-     
+
+
 
     noStroke();
     rotateZ(PI / 2);
@@ -205,34 +215,34 @@ function draw() {
   //COIN//
 
 
-  // Draw the coin only if rotating or remove button hasn't been pressed
-  if (rotating || !startGameButton.mousePressed) {
+  // Draw the coin only if coin.rotating or remove button hasn't been pressed
+  if (coin.rotating || !startGameButton.mousePressed) {
     translate(canvasX / 2, canvasY / 2);
-    let currenTime = millis() - startTime;// calculates time and use it for coin spin duration
+    let currenTime = millis() - coin.startTime;// calculates time and use it for coin spin duration
     background('rgba(0, 0, 0, 0)');
     // If elapsed time is less than duration, flip the ellipsoid
-    if (currenTime < durationTime) {
-      let rotation = map(currenTime, 0, durationTime, 0, PI);// if we want to rotate something we have to use angles so we are remapping currenTime values to 0 to PI
-      rotateX(rotation * rotationSpeed);
+    if (currenTime < coin.durationTime) {
+      let rotation = map(currenTime, 0, coin.durationTime, 0, PI);// if we want to rotate something we have to use angles so we are remapping currenTime values to 0 to PI
+      rotateX(rotation * coin.rotationSpeed);
       rotateZ(rotation);
       rotateY(rotation);
 
     } else {
       noLoop();
-      rotating = false;
+      coin.rotating = false;
       startGameButton.show();
       // Stop looping and mark rotation as finished
-      if (coin < 0.5) {
-        turn = 1;//changes turn to X
+      if (coin.coinValue < 0.5) {
+        game.turn = 1;//changes game.turn to X
         rotateX(PI * 2);//rotate to X side of coin
         console.log("x plays");
-        currentColor = color(0, 50, 255);// it will change box color when coin stops
+        gameLines.currentColor = color(0, 50, 255);// it will change box color when coin stops
       }
-      else if (coin >= 0.5) {
-        turn = 0;//changes turn to O
+      else if (coin.coinValue >= 0.5) {
+        game.turn = 0;//changes game.turn to O
         rotateX(PI);//rotate to O side of coin
         console.log("o plays");
-        currentColor = color(255, 50, 0);// it will change box color when coin stops
+        gameLines.currentColor = color(255, 50, 0);// it will change box color when coin stops
       }
 
 
@@ -264,13 +274,13 @@ function draw() {
 
 
 function flipCoin() {
-  stop = true;//when coin comes game stops
-  startTime = millis();// gets value for startTime
-  rotating = true;
+  game.stop = true;//when coin comes game stops
+  coin.startTime = millis();// gets value for coin.startTime
+  coin.rotating = true;
   loop();
 
-  coin = random(0, 1);// to decide randomly
-  console.log("coin value: " + coin);
+  coin.coinValue = random(0, 1);// to decide randomly
+  console.log("coin value: " + coin.coinValue);
 
   startGameButton.hide();//hides buttons when spinning
   flipButton.hide();
@@ -283,28 +293,28 @@ function mousePressed() {
 
 
   let i, j;// i x eksenindeki ilerlemeyi yapmak için j ise y eksenindeki ilerlemeyi yapmak için
-  if (stop === true) {
+  if (game.stop === true) {
     return;
   }
   for (i = 0; i < 3; i++) {
     for (j = 0; j < 3; j++) {
       if (mouseX <= canvasX / 3 * (i + 1) && mouseY <= canvasY / 3 * (j + 1) && mouseX >= 0 && mouseY >= 0) {
 
-        if (a[i][j] === 0) { // Check if the slot is empty
+        if (game.a[i][j] === 0) { // Check if the slot is empty
           translate(-canvasX / 2, -canvasY / 2);
-          if (turn === 0) {
-            a[i][j] = 1;
+          if (game.turn === 0) {
+            game.a[i][j] = 1;
             drawcircle(canvasX / 3 * i + canvasX / 6, canvasY / 3 * j + canvasY / 6);
 
           }
 
-          else if (turn === 1) {
-            a[i][j] = 4;
+          else if (game.turn === 1) {
+            game.a[i][j] = 4;
             drawcross(canvasX / 3 * i + canvasX / 6, canvasY / 3 * j + canvasY / 6);
 
           }
-          startColorTime = millis();// starts color change
-          turn = (turn + 1) % 2;// Toggle turn between 0 and 1
+          gameLines.startColorTime = millis();// starts color change
+          game.turn = (game.turn + 1) % 2;// Toggle game.turn between 0 and 1
 
         }
 
@@ -318,20 +328,20 @@ function mousePressed() {
 function mouseReleased() {
 
 
-  if (stop === true) {
+  if (game.stop === true) {
     return;//if game not running do not checks win
   }
   checkWin(); // checks win every time mouse relased if game still running
 
   var outputO = document.getElementById("scoreO");//to write points in html
-  outputO.innerHTML = pointsO;
+  outputO.innerHTML = game.pointsO;
 
   var outputX = document.getElementById("scoreX");
-  outputX.innerHTML = pointsX;
-  if (pointsX >= 100) {
+  outputX.innerHTML = game.pointsX;
+  if (game.pointsX >= 100) {
     document.querySelector(".col-displayX").style.fontSize = "60px";
   }
-  if (pointsO >= 100) {
+  if (game.pointsO >= 100) {
     document.querySelector(".col-displayO").style.fontSize = "60px";
   }
 }
@@ -374,91 +384,87 @@ function checkWin() {
   translate(-canvasX / 2, -canvasY / 2);
   for (i = 0; i < 3; i++) //checks win in vertical lines
   {
-    if (a[i][0] + a[i][1] + a[i][2] === 3) {
+    if (game.a[i][0] + game.a[i][1] + game.a[i][2] === 3) {
       oWins();
-      drawGameEndLine((i + 1) * canvasX / 3 - canvasX / 6, canvasY/2,1,false);
+      drawGameEndLine((i + 1) * canvasX / 3 - canvasX / 6, canvasY / 2, 1, false);
     }
-    if (a[i][0] + a[i][1] + a[i][2] === 12) {
+    if (game.a[i][0] + game.a[i][1] + game.a[i][2] === 12) {
       xWins();
-      drawGameEndLine((i + 1) * canvasX / 3 - canvasX / 6, canvasY/2,1,true);
+      drawGameEndLine((i + 1) * canvasX / 3 - canvasX / 6, canvasY / 2, 1, true);
     }
   }
 
-  if(stop)
+  if (game.stop)
     return;
 
 
   for (j = 0; j < 3; j++) // checks win in horizontal lines
   {
-    if (a[0][j] + a[1][j] + a[2][j] === 3) {
+    if (game.a[0][j] + game.a[1][j] + game.a[2][j] === 3) {
       oWins();
-      drawGameEndLine(canvasX/2, (j + 1) * canvasY / 3 - canvasY / 6,0,false);
+      drawGameEndLine(canvasX / 2, (j + 1) * canvasY / 3 - canvasY / 6, 0, false);
     }
 
-    if (a[0][j] + a[1][j] + a[2][j] === 12) {
+    if (game.a[0][j] + game.a[1][j] + game.a[2][j] === 12) {
       xWins()
-      drawGameEndLine(canvasX/2, (j + 1) * canvasY / 3 - canvasY / 6,0,true);
+      drawGameEndLine(canvasX / 2, (j + 1) * canvasY / 3 - canvasY / 6, 0, true);
       ;
 
     }
   }
 
-  if(stop)
+  if (game.stop)
     return;
 
-  if (a[0][0] + a[1][1] + a[2][2] === 3)//checks win in \ 
+  if (game.a[0][0] + game.a[1][1] + game.a[2][2] === 3)//checks win in \ 
   {
     oWins();
-    drawGameEndLine(canvasX/2, canvasY/2,2,false);
+    drawGameEndLine(canvasX / 2, canvasY / 2, 2, false);
 
 
   }
-  if (a[0][0] + a[1][1] + a[2][2] === 12) {
+  if (game.a[0][0] + game.a[1][1] + game.a[2][2] === 12) {
     xWins();
-    drawGameEndLine(canvasX/2, canvasY/2,2,true);
+    drawGameEndLine(canvasX / 2, canvasY / 2, 2, true);
   }
 
-  if(stop)
+  if (game.stop)
     return;
 
 
-  if (a[2][0] + a[1][1] + a[0][2] === 3) // checks win in /
+  if (game.a[2][0] + game.a[1][1] + game.a[0][2] === 3) // checks win in /
   {
     oWins();
-    drawGameEndLine(canvasX/2, canvasY/2,3,false);
+    drawGameEndLine(canvasX / 2, canvasY / 2, 3, false);
   }
-  if (a[2][0] + a[1][1] + a[0][2] === 12) {
+  if (game.a[2][0] + game.a[1][1] + game.a[0][2] === 12) {
     xWins();
-    drawGameEndLine(canvasX/2, canvasY/2,3,true);
+    drawGameEndLine(canvasX / 2, canvasY / 2, 3, true);
   }
 
-  if(stop)
+  if (game.stop)
     return;
 
-  if (a[0][0] != 0 && a[0][1] != 0 && a[0][2] != 0 && a[1][0] != 0 && a[1][1] != 0 && a[1][2] != 0 && a[2][0] != 0 && a[2][1] != 0 && a[2][2] != 0) {//Checks for draw
-    pointsX++;
-    pointsO++;
-    stop = true;//stops game 
+  if (game.a[0][0] != 0 && game.a[0][1] != 0 && game.a[0][2] != 0 && game.a[1][0] != 0 && game.a[1][1] != 0 && game.a[1][2] != 0 && game.a[2][0] != 0 && game.a[2][1] != 0 && game.a[2][2] != 0) {//Checks for draw
+    game.pointsX++;
+    game.pointsO++;
+    game.stop = true;//stops game 
     flipButton.show();//flip coin button appears
   }
 }
 
 
 function oWins() {
-  pointsO = pointsO + 3;
-  stop = true;
-  console.log("Owins:", pointsO);
-  
-  text('O WIN!', 50, 50);
+  game.pointsO = game.pointsO + 3;
+  game.stop = true;
+  console.log("Owins:", game.pointsO);
   flipButton.show();//flip coin button appears
 }
 
 function xWins() {
-  pointsX = pointsX + 3;
-  stop = true;
-  console.log("Xwins:", pointsX);
-  
-  text('X WIN!', 150, 650);
+  game.pointsX = game.pointsX + 3;
+  game.stop = true;
+  console.log("Xwins:", game.pointsX);
   flipButton.show();//flip coin button appears
 }
 
@@ -471,20 +477,20 @@ function restart() {
 
 
 
-  stop = false;//run game again
-  a = [//reset the values 
+  game.stop = false;//run game again
+  game.a = [//reset the values 
     [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0]
   ];
 }
 
-function drawGameEndLine(startx,starty,vh,isblue){
-  isBlue=isblue;
-  isHorizontal=vh;
-  startX=startx;
-  startY=starty;
-  startLineTime = millis();
+function drawGameEndLine(startx, starty, vh, isblue) {
+  endLines.isBlue = isblue;
+  endLines.isHorizontal = vh;
+  endLines.startX = startx;
+  endLines.startY = starty;
+  endLines.startLineTime = millis();
   loop();
 }
 
